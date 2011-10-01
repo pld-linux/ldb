@@ -1,3 +1,5 @@
+# TODO
+# - really fix the version script error (version-script.patch)
 %define		talloc_version	2.0.5
 %define		tdb_version		1.2.9
 %define		tevent_version	0.9.12
@@ -10,6 +12,7 @@ Group:		Development/Libraries
 URL:		http://ldb.samba.org/
 Source0:	http://samba.org/ftp/ldb/ldb-%{version}.tar.gz
 # Source0-md5:	61145ad9cfe017ce4fca5cbc77b9552b
+Patch0:		version-script.patch
 BuildRequires:	autoconf
 BuildRequires:	docbook-style-xsl
 BuildRequires:	libtalloc-devel >= %{talloc_version}
@@ -70,6 +73,7 @@ Development files for the Python bindings for the LDB library
 
 %prep
 %setup -q -n ldb-%{version}
+%patch0 -p1
 
 %build
 # note: configure in fact is waf call

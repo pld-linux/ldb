@@ -1,0 +1,35 @@
+gcc-6:4.6.1-4.x86_64 somewhy does not handle ! in version script
+remove for now
+
+/usr/bin/ld: error: /home/users/glen/rpm/BUILD.x86_64-linux/ldb-1.1.0/bin/default/ldb.vscript:317:3: syntax error, unexpected '!', expecting STRING or QUOTED_STRING or EXTERN
+
+LDB_1.1.0 {
+    global:
+        !ldb_*module_ops;
+        !ldb_*backend_ops;
+        ldb_*;
+    local: *;
+};
+
+#--- ldb-1.1.0/bin/default/ldb.vscript~	2011-10-02 00:06:24.000000000 +0300
+#+++ ldb-1.1.0/bin/default/ldb.vscript	2011-10-02 00:09:04.052371675 +0300
+#@@ -314,8 +314,6 @@
+# 
+# LDB_1.1.0 {
+# 	global:
+#-		!ldb_*module_ops;
+#-		!ldb_*backend_ops;
+# 		ldb_*;
+# 	local: *;
+# };
+--- ldb-1.1.0/wscript~	2011-04-21 15:42:04.000000000 +0300
++++ ldb-1.1.0/wscript	2011-10-02 00:11:31.109153772 +0300
+@@ -123,7 +123,7 @@
+             # the current modules, not the installed ones
+             modules_dir = os.path.join(os.getcwd(), 'bin/modules/ldb')
+ 
+-        abi_match = '!ldb_*module_ops !ldb_*backend_ops ldb_*'
++        abi_match = 'ldb_*'
+ 
+         bld.SAMBA_LIBRARY('ldb',
+                           COMMON_SRC + ' ' + LDB_MAP_SRC,
