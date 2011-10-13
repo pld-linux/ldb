@@ -76,7 +76,13 @@ Development files for the Python bindings for the LDB library
 %patch0 -p1
 
 %build
+# use ld.bfd
+install -d $(pwd)/ld-bin
+ln -s %{_bindir}/ld.bfd $(pwd)/ld-bin/ld
+
 # note: configure in fact is waf call
+PATH=$(pwd)/ld-bin:$PATH \
+COMPILER_PATH=$(pwd)/ld-bin \
 CC="%{__cc}" \
 CFLAGS="%{rpmcflags}" \
 PYTHONDIR=%{py_sitedir} \
