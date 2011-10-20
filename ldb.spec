@@ -1,18 +1,17 @@
 # TODO
-# - really fix the version script error (version-script.patch)
+# - ld.bfd enforced because gold does not understand '!' in version script (binutils-3:2.21.53.0.1-1)
 %define		talloc_version	2.0.5
 %define		tdb_version		1.2.9
 %define		tevent_version	0.9.12
 Summary:	A schema-less, ldap like, API and database
 Name:		libldb
 Version:	1.1.0
-Release:	1
+Release:	2
 License:	LGPL v3+
 Group:		Development/Libraries
 URL:		http://ldb.samba.org/
 Source0:	http://samba.org/ftp/ldb/ldb-%{version}.tar.gz
 # Source0-md5:	61145ad9cfe017ce4fca5cbc77b9552b
-Patch0:		version-script.patch
 BuildRequires:	autoconf
 BuildRequires:	docbook-style-xsl
 BuildRequires:	libtalloc-devel >= %{talloc_version}
@@ -73,18 +72,11 @@ Development files for the Python bindings for the LDB library
 
 %prep
 %setup -q -n ldb-%{version}
-%patch0 -p1
 
 %build
-# use ld.bfd
-install -d $(pwd)/ld-bin
-ln -s %{_bindir}/ld.bfd $(pwd)/ld-bin/ld
-
-# note: configure in fact is waf call
-PATH=$(pwd)/ld-bin:$PATH \
-COMPILER_PATH=$(pwd)/ld-bin \
 CC="%{__cc}" \
 CFLAGS="%{rpmcflags}" \
+LDFLAGS="%{rpmldflags} -fuse-ld=bfd" \
 PYTHONDIR=%{py_sitedir} \
 ./configure \
 	--prefix=%{_prefix} \
@@ -108,7 +100,7 @@ rm -rf $RPM_BUILD_ROOT
 
 # Shared libraries need to be marked executable for
 # rpmbuild to strip them and include them in debuginfo
-find $RPM_BUILD_ROOT -name "*.so*" -exec chmod -c +x {} \;
+find $RPM_BUILD_ROOT -name "*.so*" -exec chmod -c +x {} ';'
 
 %clean
 rm -rf $RPM_BUILD_ROOT
