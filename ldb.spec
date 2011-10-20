@@ -4,13 +4,13 @@
 %define		tdb_version		1.2.9
 %define		tevent_version	0.9.12
 Summary:	A schema-less, ldap like, API and database
-Name:		libldb
+Name:		ldb
 Version:	1.1.0
-Release:	2
+Release:	3
 License:	LGPL v3+
 Group:		Development/Libraries
 URL:		http://ldb.samba.org/
-Source0:	http://samba.org/ftp/ldb/ldb-%{version}.tar.gz
+Source0:	http://samba.org/ftp/ldb/%{name}-%{version}.tar.gz
 # Source0-md5:	61145ad9cfe017ce4fca5cbc77b9552b
 BuildRequires:	autoconf
 BuildRequires:	docbook-style-xsl
@@ -25,18 +25,20 @@ BuildRequires:	tevent-devel >= %{tevent_version}
 Requires:	libtalloc >= %{talloc_version}
 Requires:	tdb >= %{tdb_version}
 Requires:	tevent >= %{tevent_version}
+Provides:	libldb = %{version}-%{release}
+Obsoletes:	libldb < 1.1.0-3
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 An extensible library that implements an LDAP like API to access
 remote LDAP servers, or use local tdb databases.
 
-%package -n ldb-tools
+%package tools
 Summary:	Tools to manage LDB files
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
-%description -n ldb-tools
+%description tools
 Tools to manage LDB files.
 
 %package devel
@@ -47,6 +49,8 @@ Requires:	libtalloc-devel >= %{talloc_version}
 Requires:	pkgconfig
 Requires:	tdb-devel >= %{tdb_version}
 Requires:	tevent-devel >= %{tevent_version}
+Provides:	libldb-devel = %{version}-%{release}
+Obsoletes:	libldb-devel < 1.1.0-3
 
 %description devel
 Header files needed to develop programs that link against the LDB
@@ -65,13 +69,13 @@ Python bindings for the LDB library.
 %package -n python-ldb-devel
 Summary:	Development files for the Python bindings for the LDB library
 Group:		Development/Libraries
-Requires:	pyldb = %{version}-%{release}
+Requires:	python-ldb = %{version}-%{release}
 
 %description -n python-ldb-devel
 Development files for the Python bindings for the LDB library
 
 %prep
-%setup -q -n ldb-%{version}
+%setup -q
 
 %build
 CC="%{__cc}" \
