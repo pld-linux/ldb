@@ -1,12 +1,12 @@
 # TODO
 # - ld.bfd enforced because gold does not understand '!' in version script (binutils-3:2.21.53.0.1-1)
 %define		talloc_version	2.0.5
-%define		tdb_version		1.2.9
+%define		tdb_version		2:1.2.9
 %define		tevent_version	0.9.12
 Summary:	A schema-less, ldap like, API and database
 Name:		ldb
 Version:	1.1.0
-Release:	3
+Release:	4
 License:	LGPL v3+
 Group:		Development/Libraries
 URL:		http://ldb.samba.org/
