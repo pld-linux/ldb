@@ -9,7 +9,7 @@ Name:		ldb
 Version:	1.1.0
 Release:	4
 License:	LGPL v3+
-Group:		Development/Libraries
+Group:		Libraries
 Source0:	http://samba.org/ftp/ldb/%{name}-%{version}.tar.gz
 # Source0-md5:	61145ad9cfe017ce4fca5cbc77b9552b
 URL:		http://ldb.samba.org/
