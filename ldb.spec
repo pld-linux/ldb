@@ -1,25 +1,26 @@
 # TODO
 # - ld.bfd enforced because gold does not understand '!' in version script (binutils-3:2.21.53.0.1-1)
-%define		talloc_version	2.0.5
-%define		tdb_version	2:1.2.9
-%define		tevent_version	0.9.12
+%define		talloc_version	2:2.0.8
+%define		tdb_version	2:1.2.11
+%define		tevent_version	0.9.17
 Summary:	LDAP-like embedded database
 Summary(pl.UTF-8):	Wbudowana baza danych podobna do LDAP
 Name:		ldb
-Version:	1.1.0
-Release:	4
+Version:	1.1.14
+Release:	1
 License:	LGPL v3+
 Group:		Libraries
 Source0:	http://samba.org/ftp/ldb/%{name}-%{version}.tar.gz
-# Source0-md5:	61145ad9cfe017ce4fca5cbc77b9552b
+# Source0-md5:	7692c592ec7d8070f1d97aeb5738e05a
 URL:		http://ldb.samba.org/
 BuildRequires:	autoconf
 BuildRequires:	docbook-style-xsl
 BuildRequires:	libxslt
 BuildRequires:	popt-devel
-BuildRequires:	python-devel
-BuildRequires:	python-talloc-devel
-BuildRequires:	python-tdb
+BuildRequires:	python-devel >= 1:2.4.2
+BuildRequires:	python-talloc-devel >= %{talloc_version}
+BuildRequires:	python-tdb >= %{tdb_version}
+BuildRequires:	python-tevent >= %{tevent_version}
 BuildRequires:	talloc-devel >= %{talloc_version}
 BuildRequires:	tdb-devel >= %{tdb_version}
 BuildRequires:	tevent-devel >= %{tevent_version}
@@ -75,7 +76,8 @@ Summary:	Python bindings for the LDB library
 Summary(pl.UTF-8):	Wiązania Pythona do biblioteki LDB
 Group:		Libraries/Python
 Requires:	%{name} = %{version}-%{release}
-Requires:	python-tdb = %{tdb_version}
+Requires:	python-libs >= 1:2.4.2
+Requires:	python-tdb >= %{tdb_version}
 Obsoletes:	pyldb
 
 %description -n python-ldb
@@ -121,9 +123,6 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-# Remove _tevent.so (it's managed by python-tevent)
-%{__rm} $RPM_BUILD_ROOT%{py_sitedir}/_tevent.so
-
 # Shared libraries need to be marked executable for
 # rpmbuild to strip them and include them in debuginfo
 find $RPM_BUILD_ROOT -name "*.so*" -exec chmod -c +x {} ';'
@@ -139,7 +138,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libldb.so.*
+%attr(755,root,root) %{_libdir}/libldb.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libldb.so.1
 %dir %{_libdir}/ldb
 %dir %{_libdir}/ldb/modules
 %dir %{_libdir}/ldb/modules/ldb
@@ -174,7 +174,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n python-ldb
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libpyldb-util.so.1*
+%attr(755,root,root) %{_libdir}/libpyldb-util.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libpyldb-util.so.1
 %attr(755,root,root) %{py_sitedir}/ldb.so
 
 %files -n python-ldb-devel
