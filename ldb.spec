@@ -6,12 +6,12 @@
 Summary:	LDAP-like embedded database
 Summary(pl.UTF-8):	Wbudowana baza danych podobna do LDAP
 Name:		ldb
-Version:	1.1.14
+Version:	1.1.15
 Release:	1
 License:	LGPL v3+
 Group:		Libraries
 Source0:	http://samba.org/ftp/ldb/%{name}-%{version}.tar.gz
-# Source0-md5:	7692c592ec7d8070f1d97aeb5738e05a
+# Source0-md5:	97ee9b455f6a547fb2b3b5a7836c41d7
 URL:		http://ldb.samba.org/
 BuildRequires:	autoconf
 BuildRequires:	docbook-style-xsl
