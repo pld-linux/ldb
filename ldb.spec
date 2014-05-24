@@ -1,22 +1,22 @@
 # TODO
 # - ld.bfd enforced because gold does not understand '!' in version script (binutils-3:2.21.53.0.1-1)
-%define		talloc_version	2:2.0.8
-%define		tdb_version	2:1.2.12
-%define		tevent_version	0.9.17
+%define		talloc_version	2:2.1.0
+%define		tdb_version	2:1.2.13
+%define		tevent_version	0.9.21
 Summary:	LDAP-like embedded database
 Summary(pl.UTF-8):	Wbudowana baza danych podobna do LDAP
 Name:		ldb
-Version:	1.1.16
+Version:	1.1.17
 Release:	1
 License:	LGPL v3+
 Group:		Libraries
-Source0:	http://samba.org/ftp/ldb/%{name}-%{version}.tar.gz
-# Source0-md5:	60865c0b5704469ee2e59703087c8ec8
+Source0:	http://www.samba.org/ftp/ldb/%{name}-%{version}.tar.gz
+# Source0-md5:	7c2ab4e3f2a4186493aa06eabbc61cc0
 URL:		http://ldb.samba.org/
 BuildRequires:	autoconf
 BuildRequires:	docbook-style-xsl
 BuildRequires:	libxslt
-BuildRequires:	popt-devel
+BuildRequires:	popt-devel >= 1.6
 BuildRequires:	python-devel >= 1:2.4.2
 BuildRequires:	python-talloc-devel >= %{talloc_version}
 BuildRequires:	python-tdb >= %{tdb_version}
@@ -27,6 +27,7 @@ BuildRequires:	tevent-devel >= %{tevent_version}
 Requires:	talloc >= %{talloc_version}
 Requires:	tdb >= %{tdb_version}
 Requires:	tevent >= %{tevent_version}
+Requires:	popt >= 1.6
 Provides:	libldb = %{version}-%{release}
 Obsoletes:	libldb < 1.1.0-3
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
