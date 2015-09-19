@@ -1,18 +1,18 @@
 # TODO
 # - ld.bfd enforced because gold does not understand '!' in version script (binutils-3:2.21.53.0.1-1)
-%define		talloc_version	2:2.1.1
-%define		tdb_version	2:1.3.4
-%define		tevent_version	0.9.22
+%define		talloc_version	2:2.1.3
+%define		tdb_version	2:1.3.7
+%define		tevent_version	0.9.25
 Summary:	LDAP-like embedded database
 Summary(pl.UTF-8):	Wbudowana baza danych podobna do LDAP
 Name:		ldb
-Version:	1.1.20
-Release:	2
+Version:	1.1.21
+Release:	1
 License:	LGPL v3+
 Group:		Libraries
-Source0:	http://www.samba.org/ftp/ldb/%{name}-%{version}.tar.gz
-# Source0-md5:	3d9abbdc334e8dc43e52cf8619bb2c24
-URL:		http://ldb.samba.org/
+Source0:	https://www.samba.org/ftp/ldb/%{name}-%{version}.tar.gz
+# Source0-md5:	94ba09c7452fff68df3481686c56677e
+URL:		https://ldb.samba.org/
 BuildRequires:	autoconf
 BuildRequires:	docbook-style-xsl
 BuildRequires:	libxslt
