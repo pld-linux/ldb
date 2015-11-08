@@ -1,26 +1,28 @@
 # TODO
 # - ld.bfd enforced because gold does not understand '!' in version script (binutils-3:2.21.53.0.1-1)
-%define		talloc_version	2:2.1.3
-%define		tdb_version	2:1.3.7
-%define		tevent_version	0.9.25
+%define		talloc_version	2:2.1.5
+%define		tdb_version	2:1.3.8
+%define		tevent_version	0.9.26
 Summary:	LDAP-like embedded database
 Summary(pl.UTF-8):	Wbudowana baza danych podobna do LDAP
 Name:		ldb
-Version:	1.1.21
+Version:	1.1.23
 Release:	1
 License:	LGPL v3+
 Group:		Libraries
 Source0:	https://www.samba.org/ftp/ldb/%{name}-%{version}.tar.gz
-# Source0-md5:	94ba09c7452fff68df3481686c56677e
+# Source0-md5:	93bd52b5e90a6f7dd30c7b08d2fa5e3a
 URL:		https://ldb.samba.org/
 BuildRequires:	autoconf
 BuildRequires:	docbook-style-xsl
 BuildRequires:	libxslt
+BuildRequires:	openldap-devel
 BuildRequires:	popt-devel >= 1.6
 BuildRequires:	python-devel >= 1:2.4.2
 BuildRequires:	python-talloc-devel >= %{talloc_version}
 BuildRequires:	python-tdb >= %{tdb_version}
 BuildRequires:	python-tevent >= %{tevent_version}
+BuildRequires:	rpmbuild(macros) >= 1.219
 BuildRequires:	talloc-devel >= %{talloc_version}
 BuildRequires:	tdb-devel >= %{tdb_version}
 BuildRequires:	tevent-devel >= %{tevent_version}
@@ -124,6 +126,10 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+%py_comp $RPM_BUILD_ROOT%{py_sitedir}
+%py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
+%py_postclean
+
 # Shared libraries need to be marked executable for
 # rpmbuild to strip them and include them in debuginfo
 find $RPM_BUILD_ROOT -name "*.so*" -exec chmod -c +x {} ';'
@@ -178,6 +184,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libpyldb-util.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libpyldb-util.so.1
 %attr(755,root,root) %{py_sitedir}/ldb.so
+%{py_sitedir}/_ldb_text.py[co]
 
 %files -n python-ldb-devel
 %defattr(644,root,root,755)
