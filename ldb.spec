@@ -1,3 +1,4 @@
+# NOTE: for ldb 1.2.x see DEVEL branch (samba 4.6.x requires ldb < 1.2)
 # TODO
 # - ld.bfd enforced because gold does not understand '!' in version script (binutils-3:2.21.53.0.1-1)
 %define		talloc_version	2:2.1.9
