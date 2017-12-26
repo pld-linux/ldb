@@ -1,9 +1,8 @@
-# NOTE: for ldb 1.2.x see DEVEL branch (samba 4.6.x requires ldb < 1.2)
 # TODO
 # - ld.bfd enforced because gold does not understand '!' in version script (binutils-3:2.21.53.0.1-1)
-%define		talloc_version	2:2.1.9
+%define		talloc_version	2:2.1.10
 %define		tdb_version	2:1.3.15
-%define		tevent_version	0.9.31
+%define		tevent_version	0.9.33
 Summary:	LDAP-like embedded database
 Summary(pl.UTF-8):	Wbudowana baza danych podobna do LDAP
 Name:		ldb
