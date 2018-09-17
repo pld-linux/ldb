@@ -6,12 +6,12 @@
 Summary:	LDAP-like embedded database
 Summary(pl.UTF-8):	Wbudowana baza danych podobna do LDAP
 Name:		ldb
-Version:	1.3.6
+Version:	1.4.2
 Release:	1
 License:	LGPL v3+
 Group:		Libraries
 Source0:	https://www.samba.org/ftp/ldb/%{name}-%{version}.tar.gz
-# Source0-md5:	357fff085e46a302197cfb44d4a8098f
+# Source0-md5:	304477df5661ca93ecbfc4787669ae8b
 URL:		https://ldb.samba.org/
 BuildRequires:	cmocka-devel >= 1.1.1
 BuildRequires:	docbook-style-xsl
@@ -148,6 +148,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libldb.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libldb.so.1
 %dir %{_libdir}/ldb
+%attr(755,root,root) %{_libdir}/ldb/libldb-key-value.so
+%attr(755,root,root) %{_libdir}/ldb/libldb-mdb-int.so
 %dir %{_libdir}/ldb/modules
 %dir %{_libdir}/ldb/modules/ldb
 %attr(755,root,root) %{_libdir}/ldb/modules/ldb/*.so
