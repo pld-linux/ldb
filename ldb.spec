@@ -1,8 +1,13 @@
 # TODO
 # - ld.bfd enforced because gold does not understand '!' in version script (binutils-3:2.21.53.0.1-1)
-%define		talloc_version	2:2.1.11
-%define		tdb_version	2:1.3.15
-%define		tevent_version	0.9.36
+#
+%ifarch %{x8664} alpha mips64 ppc64 s390x sparc64
+# lmdb support requires 64-bit size_t
+%define	with_lmdb	1
+%endif
+%define		talloc_version	2:2.1.14
+%define		tdb_version	2:1.3.16
+%define		tevent_version	0.9.37
 Summary:	LDAP-like embedded database
 Summary(pl.UTF-8):	Wbudowana baza danych podobna do LDAP
 Name:		ldb
@@ -16,6 +21,7 @@ URL:		https://ldb.samba.org/
 BuildRequires:	cmocka-devel >= 1.1.1
 BuildRequires:	docbook-style-xsl
 BuildRequires:	libxslt
+%{?with_lmdb:BuildRequires:	lmdb-devel >= 0.9.16}
 BuildRequires:	openldap-devel
 BuildRequires:	popt-devel >= 1.6
 BuildRequires:	python-devel >= 1:2.4.2
@@ -26,6 +32,7 @@ BuildRequires:	rpmbuild(macros) >= 1.219
 BuildRequires:	talloc-devel >= %{talloc_version}
 BuildRequires:	tdb-devel >= %{tdb_version}
 BuildRequires:	tevent-devel >= %{tevent_version}
+%{?with_lmdb:Requires:	lmdb >= 0.9.16}
 Requires:	talloc >= %{talloc_version}
 Requires:	tdb >= %{tdb_version}
 Requires:	tevent >= %{tevent_version}
@@ -149,9 +156,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %ghost %{_libdir}/libldb.so.1
 %dir %{_libdir}/ldb
 %attr(755,root,root) %{_libdir}/ldb/libldb-key-value.so
-%ifarch %{x8664}
-%attr(755,root,root) %{_libdir}/ldb/libldb-mdb-int.so
-%endif
+%{?with_lmdb:%attr(755,root,root) %{_libdir}/ldb/libldb-mdb-int.so}
 %dir %{_libdir}/ldb/modules
 %dir %{_libdir}/ldb/modules/ldb
 %attr(755,root,root) %{_libdir}/ldb/modules/ldb/*.so
