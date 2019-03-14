@@ -1,9 +1,13 @@
 # TODO
-# - ld.bfd enforced because gold does not understand '!' in version script (binutils-3:2.21.53.0.1-1)
+# - expect python3 as default in 1.5.x line (see e.g. tevent.spec for handling differences)
 #
-%ifarch %{x8664} alpha mips64 ppc64 s390x sparc64
+# Conditional build:
+%bcond_without	lmdb	# LMDB module (64-bit only)
+%bcond_without	python3	# CPython 3.x interface
+#
+%ifnarch %{x8664} aarch64 alpha mips64 ppc64 s390x sparc64
 # lmdb support requires 64-bit size_t
-%define	with_lmdb	1
+%undefine	with_lmdb
 %endif
 %define		talloc_version	2:2.1.14
 %define		tdb_version	2:1.3.16
@@ -20,7 +24,7 @@ Source0:	https://www.samba.org/ftp/ldb/%{name}-%{version}.tar.gz
 URL:		https://ldb.samba.org/
 BuildRequires:	cmocka-devel >= 1.1.1
 BuildRequires:	docbook-style-xsl
-BuildRequires:	libxslt
+BuildRequires:	libxslt-progs
 %{?with_lmdb:BuildRequires:	lmdb-devel >= 0.9.16}
 BuildRequires:	openldap-devel
 BuildRequires:	popt-devel >= 1.6
@@ -28,7 +32,13 @@ BuildRequires:	python-devel >= 1:2.4.2
 BuildRequires:	python-talloc-devel >= %{talloc_version}
 BuildRequires:	python-tdb >= %{tdb_version}
 BuildRequires:	python-tevent >= %{tevent_version}
-BuildRequires:	rpmbuild(macros) >= 1.219
+%if %{with python3}
+BuildRequires:	python3-devel >= 1:3.2
+BuildRequires:	python3-talloc-devel >= %{talloc_version}
+BuildRequires:	python3-tdb >= %{tdb_version}
+BuildRequires:	python3-tevent >= %{tevent_version}
+%endif
+BuildRequires:	rpmbuild(macros) >= 1.507
 BuildRequires:	talloc-devel >= %{talloc_version}
 BuildRequires:	tdb-devel >= %{tdb_version}
 BuildRequires:	tevent-devel >= %{tevent_version}
@@ -40,6 +50,9 @@ Requires:	popt >= 1.6
 Provides:	libldb = %{version}-%{release}
 Obsoletes:	libldb < 1.1.0-3
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+# %{_includedir}/pyldb.h shared between python*-ldb-devel
+%define		_duplicate_files_terminate_build	0
 
 %description
 An extensible library that implements an LDAP like API to access
@@ -82,8 +95,8 @@ Pliki nagłówkowe potrzebne do tworzenia programów wykorzystujących
 bibliotekę LDB.
 
 %package -n python-ldb
-Summary:	Python bindings for the LDB library
-Summary(pl.UTF-8):	Wiązania Pythona do biblioteki LDB
+Summary:	Python 2 bindings for the LDB library
+Summary(pl.UTF-8):	Wiązania Pythona 2 do biblioteki LDB
 Group:		Libraries/Python
 Requires:	%{name} = %{version}-%{release}
 Requires:	python-libs >= 1:2.4.2
@@ -91,22 +104,48 @@ Requires:	python-tdb >= %{tdb_version}
 Obsoletes:	pyldb
 
 %description -n python-ldb
-Python bindings for the LDB library.
+Python 2 bindings for the LDB library.
 
 %description -n python-ldb -l pl.UTF-8
-Wiązania Pythona do biblioteki LDB.
+Wiązania Pythona 2 do biblioteki LDB.
 
 %package -n python-ldb-devel
-Summary:	Development files for the Python bindings for the LDB library
-Summary(pl.UTF-8):	Pliki programistyczne wiązań Pythona do biblioteki LDB
+Summary:	Development files for the Python 2 bindings for the LDB library
+Summary(pl.UTF-8):	Pliki programistyczne wiązań Pythona 2 do biblioteki LDB
 Group:		Development/Libraries
 Requires:	python-ldb = %{version}-%{release}
 
 %description -n python-ldb-devel
-Development files for the Python bindings for the LDB library.
+Development files for the Python 2 bindings for the LDB library.
 
 %description -n python-ldb-devel -l pl.UTF-8
-Pliki programistyczne wiązań Pythona do biblioteki LDB.
+Pliki programistyczne wiązań Pythona 2 do biblioteki LDB.
+
+%package -n python3-ldb
+Summary:	Python 3 bindings for the LDB library
+Summary(pl.UTF-8):	Wiązania Pythona 3 do biblioteki LDB
+Group:		Libraries/Python
+Requires:	%{name} = %{version}-%{release}
+Requires:	python3-tdb >= %{tdb_version}
+Obsoletes:	pyldb
+
+%description -n python3-ldb
+Python 3 bindings for the LDB library.
+
+%description -n python3-ldb -l pl.UTF-8
+Wiązania Pythona 3 do biblioteki LDB.
+
+%package -n python3-ldb-devel
+Summary:	Development files for the Python 3 bindings for the LDB library
+Summary(pl.UTF-8):	Pliki programistyczne wiązań Pythona 3 do biblioteki LDB
+Group:		Development/Libraries
+Requires:	python3-ldb = %{version}-%{release}
+
+%description -n python3-ldb-devel
+Development files for the Python 3 bindings for the LDB library.
+
+%description -n python3-ldb-devel -l pl.UTF-8
+Pliki programistyczne wiązań Pythona 3 do biblioteki LDB.
 
 %prep
 %setup -q
@@ -114,8 +153,6 @@ Pliki programistyczne wiązań Pythona do biblioteki LDB.
 %build
 CC="%{__cc}" \
 CFLAGS="%{rpmcflags}" \
-LDFLAGS="%{rpmldflags} -fuse-ld=bfd" \
-PYTHONDIR=%{py_sitedir} \
 ./configure \
 	--prefix=%{_prefix} \
 	--libdir=%{_libdir} \
@@ -123,7 +160,8 @@ PYTHONDIR=%{py_sitedir} \
 	--with-privatelibdir=%{_libdir}/ldb \
 	--bundled-libraries=NONE \
 	--disable-rpath \
-	--disable-rpath-install
+	--disable-rpath-install \
+	%{?with_python3:--extra-python=%{__python3}}
 
 %{__make} \
 	V=1
@@ -137,6 +175,11 @@ rm -rf $RPM_BUILD_ROOT
 %py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
 %py_postclean
 
+%if %{with python3}
+%py3_comp $RPM_BUILD_ROOT%{py3_sitedir}
+%py3_ocomp $RPM_BUILD_ROOT%{py3_sitedir}
+%endif
+
 # Shared libraries need to be marked executable for
 # rpmbuild to strip them and include them in debuginfo
 find $RPM_BUILD_ROOT -name "*.so*" -exec chmod -c +x {} ';'
@@ -149,6 +192,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %post	-n python-ldb -p /sbin/ldconfig
 %postun	-n python-ldb -p /sbin/ldconfig
+
+%post	-n python3-ldb -p /sbin/ldconfig
+%postun	-n python3-ldb -p /sbin/ldconfig
 
 %files
 %defattr(644,root,root,755)
@@ -200,3 +246,19 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libpyldb-util.so
 %{_includedir}/pyldb.h
 %{_pkgconfigdir}/pyldb-util.pc
+
+%if %{with python3}
+%files -n python3-ldb
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libpyldb-util.cpython-3*.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libpyldb-util.cpython-3*.so.1
+%attr(755,root,root) %{py3_sitedir}/ldb.cpython-*.so
+%{py3_sitedir}/_ldb_text.py
+%{py3_sitedir}/__pycache__/_ldb_text.cpython-*.py[co]
+
+%files -n python3-ldb-devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libpyldb-util.cpython-3*.so
+%{_includedir}/pyldb.h
+%{_pkgconfigdir}/pyldb-util.cpython-3*.pc
+%endif
