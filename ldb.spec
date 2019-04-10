@@ -1,5 +1,3 @@
-# TODO
-# - expect python3 as default in 1.5.x line (see e.g. tevent.spec for handling differences)
 #
 # Conditional build:
 %bcond_without	lmdb	# LMDB module (64-bit only)
