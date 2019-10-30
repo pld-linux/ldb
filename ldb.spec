@@ -1,24 +1,23 @@
 #
 # Conditional build:
 %bcond_without	lmdb	# LMDB module (64-bit only)
-%bcond_without	python2	# CPython 2.x interface
 #
 %ifnarch %{x8664} aarch64 alpha mips64 ppc64 s390x sparc64
 # lmdb support requires 64-bit size_t
 %undefine	with_lmdb
 %endif
-%define		talloc_version	2:2.1.16
-%define		tdb_version	2:1.3.18
-%define		tevent_version	0.9.39
+%define		talloc_version	2:2.3.0
+%define		tdb_version	2:1.4.0
+%define		tevent_version	0.10.0
 Summary:	LDAP-like embedded database
 Summary(pl.UTF-8):	Wbudowana baza danych podobna do LDAP
 Name:		ldb
-Version:	1.5.6
-Release:	2
+Version:	2.0.7
+Release:	1
 License:	LGPL v3+
 Group:		Libraries
 Source0:	https://www.samba.org/ftp/ldb/%{name}-%{version}.tar.gz
-# Source0-md5:	fc58ef432c1fcb03fc3bb6cccce08977
+# Source0-md5:	324992dc4c71a4b00686b3dc34c2b9cb
 URL:		https://ldb.samba.org/
 BuildRequires:	cmocka-devel >= 1.1.3
 BuildRequires:	docbook-style-xsl
@@ -26,12 +25,6 @@ BuildRequires:	libxslt-progs
 %{?with_lmdb:BuildRequires:	lmdb-devel >= 0.9.16}
 BuildRequires:	openldap-devel
 BuildRequires:	popt-devel >= 1.6
-%if %{with python2}
-BuildRequires:	python-devel >= 1:2.4.2
-BuildRequires:	python-talloc-devel >= %{talloc_version}
-BuildRequires:	python-tdb >= %{tdb_version}
-BuildRequires:	python-tevent >= %{tevent_version}
-%endif
 BuildRequires:	python3-devel >= 1:3.2
 BuildRequires:	python3-talloc-devel >= %{talloc_version}
 BuildRequires:	python3-tdb >= %{tdb_version}
@@ -92,33 +85,6 @@ library.
 Pliki nagłówkowe potrzebne do tworzenia programów wykorzystujących
 bibliotekę LDB.
 
-%package -n python-ldb
-Summary:	Python 2 bindings for the LDB library
-Summary(pl.UTF-8):	Wiązania Pythona 2 do biblioteki LDB
-Group:		Libraries/Python
-Requires:	%{name} = %{version}-%{release}
-Requires:	python-libs >= 1:2.4.2
-Requires:	python-tdb >= %{tdb_version}
-Obsoletes:	pyldb
-
-%description -n python-ldb
-Python 2 bindings for the LDB library.
-
-%description -n python-ldb -l pl.UTF-8
-Wiązania Pythona 2 do biblioteki LDB.
-
-%package -n python-ldb-devel
-Summary:	Development files for the Python 2 bindings for the LDB library
-Summary(pl.UTF-8):	Pliki programistyczne wiązań Pythona 2 do biblioteki LDB
-Group:		Development/Libraries
-Requires:	python-ldb = %{version}-%{release}
-
-%description -n python-ldb-devel
-Development files for the Python 2 bindings for the LDB library.
-
-%description -n python-ldb-devel -l pl.UTF-8
-Pliki programistyczne wiązań Pythona 2 do biblioteki LDB.
-
 %package -n python3-ldb
 Summary:	Python 3 bindings for the LDB library
 Summary(pl.UTF-8):	Wiązania Pythona 3 do biblioteki LDB
@@ -158,8 +124,7 @@ CFLAGS="%{rpmcflags}" \
 	--with-privatelibdir=%{_libdir}/ldb \
 	--bundled-libraries=NONE \
 	--disable-rpath \
-	--disable-rpath-install \
-	%{?with_python2:--extra-python=%{__python}}
+	--disable-rpath-install
 
 %{__make} \
 	V=1
@@ -168,12 +133,6 @@ CFLAGS="%{rpmcflags}" \
 rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
-
-%if %{with python2}
-%py_comp $RPM_BUILD_ROOT%{py_sitedir}
-%py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
-%py_postclean
-%endif
 
 %py3_comp $RPM_BUILD_ROOT%{py3_sitedir}
 %py3_ocomp $RPM_BUILD_ROOT%{py3_sitedir}
@@ -188,16 +147,13 @@ rm -rf $RPM_BUILD_ROOT
 %post	-p /sbin/ldconfig
 %postun	-p /sbin/ldconfig
 
-%post	-n python-ldb -p /sbin/ldconfig
-%postun	-n python-ldb -p /sbin/ldconfig
-
 %post	-n python3-ldb -p /sbin/ldconfig
 %postun	-n python3-ldb -p /sbin/ldconfig
 
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libldb.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libldb.so.1
+%attr(755,root,root) %ghost %{_libdir}/libldb.so.2
 %dir %{_libdir}/ldb
 %attr(755,root,root) %{_libdir}/ldb/libldb-key-value.so
 %attr(755,root,root) %{_libdir}/ldb/libldb-tdb-err-map.so
@@ -234,25 +190,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_pkgconfigdir}/ldb.pc
 %{_mandir}/man3/ldb.3*
 
-%if %{with python2}
-%files -n python-ldb
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libpyldb-util.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libpyldb-util.so.1
-%attr(755,root,root) %{py_sitedir}/ldb.so
-%{py_sitedir}/_ldb_text.py[co]
-
-%files -n python-ldb-devel
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libpyldb-util.so
-%{_includedir}/pyldb.h
-%{_pkgconfigdir}/pyldb-util.pc
-%endif
-
 %files -n python3-ldb
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libpyldb-util.cpython-3*.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libpyldb-util.cpython-3*.so.1
+%attr(755,root,root) %ghost %{_libdir}/libpyldb-util.cpython-3*.so.2
 %attr(755,root,root) %{py3_sitedir}/ldb.cpython-*.so
 %{py3_sitedir}/_ldb_text.py
 %{py3_sitedir}/__pycache__/_ldb_text.cpython-*.py[co]
