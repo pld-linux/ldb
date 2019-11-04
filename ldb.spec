@@ -13,7 +13,7 @@ Summary:	LDAP-like embedded database
 Summary(pl.UTF-8):	Wbudowana baza danych podobna do LDAP
 Name:		ldb
 Version:	2.0.7
-Release:	1
+Release:	2
 License:	LGPL v3+
 Group:		Libraries
 Source0:	https://www.samba.org/ftp/ldb/%{name}-%{version}.tar.gz
@@ -40,6 +40,8 @@ Requires:	tevent >= %{tevent_version}
 Requires:	popt >= 1.6
 Provides:	libldb = %{version}-%{release}
 Obsoletes:	libldb < 1.1.0-3
+Obsoletes:	python-ldb
+Obsoletes:	python-ldb-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # %{_includedir}/pyldb.h shared between python*-ldb-devel
