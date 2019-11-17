@@ -7,7 +7,7 @@
 %undefine	with_lmdb
 %endif
 %define		talloc_version	2:2.3.0
-%define		tdb_version	2:1.4.0
+%define		tdb_version	2:1.4.2
 %define		tevent_version	0.10.0
 Summary:	LDAP-like embedded database
 Summary(pl.UTF-8):	Wbudowana baza danych podobna do LDAP
@@ -29,7 +29,7 @@ BuildRequires:	python3-devel >= 1:3.2
 BuildRequires:	python3-talloc-devel >= %{talloc_version}
 BuildRequires:	python3-tdb >= %{tdb_version}
 BuildRequires:	python3-tevent >= %{tevent_version}
-BuildRequires:	rpmbuild(macros) >= 1.507
+BuildRequires:	rpmbuild(macros) >= 1.704
 BuildRequires:	talloc-devel >= %{talloc_version}
 BuildRequires:	tdb-devel >= %{tdb_version}
 BuildRequires:	tevent-devel >= %{tevent_version}
@@ -40,12 +40,10 @@ Requires:	tevent >= %{tevent_version}
 Requires:	popt >= 1.6
 Provides:	libldb = %{version}-%{release}
 Obsoletes:	libldb < 1.1.0-3
+# ldb 1.6+ dropped python2 support
 Obsoletes:	python-ldb
 Obsoletes:	python-ldb-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-
-# %{_includedir}/pyldb.h shared between python*-ldb-devel
-%define		_duplicate_files_terminate_build	0
 
 %description
 An extensible library that implements an LDAP like API to access
