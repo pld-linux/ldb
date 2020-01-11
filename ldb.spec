@@ -21,6 +21,7 @@ Source0:	https://www.samba.org/ftp/ldb/%{name}-%{version}.tar.gz
 URL:		https://ldb.samba.org/
 BuildRequires:	cmocka-devel >= 1.1.3
 BuildRequires:	docbook-style-xsl
+BuildRequires:	libbsd-devel
 BuildRequires:	libxslt-progs
 %{?with_lmdb:BuildRequires:	lmdb-devel >= 0.9.16}
 BuildRequires:	openldap-devel
