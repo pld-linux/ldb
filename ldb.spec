@@ -42,8 +42,8 @@ Requires:	popt >= 1.6
 Provides:	libldb = %{version}-%{release}
 Obsoletes:	libldb < 1.1.0-3
 # ldb 1.6+ dropped python2 support
-Obsoletes:	python-ldb
-Obsoletes:	python-ldb-devel
+Obsoletes:	python-ldb < 1.6
+Obsoletes:	python-ldb-devel < 1.6
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -92,7 +92,7 @@ Summary(pl.UTF-8):	Wiązania Pythona 3 do biblioteki LDB
 Group:		Libraries/Python
 Requires:	%{name} = %{version}-%{release}
 Requires:	python3-tdb >= %{tdb_version}
-Obsoletes:	pyldb
+Obsoletes:	pyldb < 1.1.0-1
 
 %description -n python3-ldb
 Python 3 bindings for the LDB library.
