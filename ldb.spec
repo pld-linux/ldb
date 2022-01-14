@@ -7,7 +7,7 @@
 %undefine	with_lmdb
 %endif
 %define		talloc_version	2:2.3.3
-%define		tdb_version	2:1.4.3
+%define		tdb_version	2:1.4.4
 %define		tevent_version	0.10.2
 Summary:	LDAP-like embedded database
 Summary(pl.UTF-8):	Wbudowana baza danych podobna do LDAP
