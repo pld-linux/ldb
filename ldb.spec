@@ -21,6 +21,7 @@ Source0:	https://download.samba.org/pub/ldb/%{name}-%{version}.tar.gz
 URL:		https://ldb.samba.org/
 BuildRequires:	cmocka-devel >= 1.1.3
 BuildRequires:	docbook-style-xsl
+BuildRequires:	docbook-style-xsl-nons
 BuildRequires:	libbsd-devel
 BuildRequires:	libxslt-progs
 %{?with_lmdb:BuildRequires:	lmdb-devel >= 0.9.16}
