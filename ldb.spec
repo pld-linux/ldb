@@ -12,12 +12,12 @@
 Summary:	LDAP-like embedded database
 Summary(pl.UTF-8):	Wbudowana baza danych podobna do LDAP
 Name:		ldb
-Version:	2.5.2
-Release:	3
+Version:	2.7.1
+Release:	1
 License:	LGPL v3+
 Group:		Libraries
 Source0:	https://download.samba.org/pub/ldb/%{name}-%{version}.tar.gz
-# Source0-md5:	c7fc9d1d43b801d3932484b1de7442fe
+# Source0-md5:	e443a8da17758479c3b5c542e8e3ff1a
 URL:		https://ldb.samba.org/
 BuildRequires:	cmocka-devel >= 1.1.3
 BuildRequires:	docbook-style-xsl
