@@ -26,6 +26,7 @@ BuildRequires:	libbsd-devel
 BuildRequires:	libxslt-progs
 %{?with_lmdb:BuildRequires:	lmdb-devel >= 0.9.16}
 BuildRequires:	openldap-devel
+BuildRequires:	pkgconfig
 BuildRequires:	popt-devel >= 1.6
 BuildRequires:	python3-devel >= 1:3.6
 BuildRequires:	python3-talloc-devel >= %{talloc_version}
