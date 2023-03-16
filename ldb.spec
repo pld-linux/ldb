@@ -6,9 +6,9 @@
 # lmdb support requires 64-bit size_t
 %undefine	with_lmdb
 %endif
-%define		talloc_version	2:2.3.3
-%define		tdb_version	2:1.4.4
-%define		tevent_version	0.11.0
+%define		talloc_version	2:2.4.0
+%define		tdb_version	2:1.4.8
+%define		tevent_version	0.14.1
 Summary:	LDAP-like embedded database
 Summary(pl.UTF-8):	Wbudowana baza danych podobna do LDAP
 Name:		ldb
@@ -27,7 +27,7 @@ BuildRequires:	libxslt-progs
 %{?with_lmdb:BuildRequires:	lmdb-devel >= 0.9.16}
 BuildRequires:	openldap-devel
 BuildRequires:	popt-devel >= 1.6
-BuildRequires:	python3-devel >= 1:3.2
+BuildRequires:	python3-devel >= 1:3.6
 BuildRequires:	python3-talloc-devel >= %{talloc_version}
 BuildRequires:	python3-tdb >= %{tdb_version}
 BuildRequires:	python3-tevent >= %{tevent_version}
