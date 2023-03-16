@@ -29,6 +29,7 @@ BuildRequires:	openldap-devel
 BuildRequires:	pkgconfig
 BuildRequires:	popt-devel >= 1.6
 BuildRequires:	python3-devel >= 1:3.6
+BuildRequires:	python3-modules >= 1:3.6
 BuildRequires:	python3-talloc-devel >= %{talloc_version}
 BuildRequires:	python3-tdb >= %{tdb_version}
 BuildRequires:	python3-tevent >= %{tevent_version}
