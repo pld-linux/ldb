@@ -6,18 +6,18 @@
 # lmdb support requires 64-bit size_t
 %undefine	with_lmdb
 %endif
-%define		talloc_version	2:2.4.0
-%define		tdb_version	2:1.4.8
-%define		tevent_version	0.14.1
+%define		talloc_version	2:2.4.1
+%define		tdb_version	2:1.4.9
+%define		tevent_version	0.15.0
 Summary:	LDAP-like embedded database
 Summary(pl.UTF-8):	Wbudowana baza danych podobna do LDAP
 Name:		ldb
-Version:	2.7.2
+Version:	2.8.0
 Release:	1
 License:	LGPL v3+
 Group:		Libraries
 Source0:	https://download.samba.org/pub/ldb/%{name}-%{version}.tar.gz
-# Source0-md5:	f414017ebb286eb939c4afddb8429540
+# Source0-md5:	89e321526ad13cc50bcd63ddb483decb
 URL:		https://ldb.samba.org/
 BuildRequires:	cmocka-devel >= 1.1.3
 BuildRequires:	docbook-style-xsl
