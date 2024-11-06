@@ -1,3 +1,4 @@
+# NOTE: since samba 4.21.0 (ldb 2.10.0) ldb is built as a part of samba.spec
 #
 # Conditional build:
 %bcond_without	lmdb	# LMDB module (64-bit only)
