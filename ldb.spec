@@ -14,7 +14,7 @@ Summary:	LDAP-like embedded database
 Summary(pl.UTF-8):	Wbudowana baza danych podobna do LDAP
 Name:		ldb
 Version:	2.9.2
-Release:	1
+Release:	2
 License:	LGPL v3+
 Group:		Libraries
 Source0:	https://download.samba.org/pub/ldb/%{name}-%{version}.tar.gz
